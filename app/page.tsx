@@ -23,7 +23,7 @@ type ApiResponse = {
 };
 
 export default function HabitTracker() {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [entries, setEntries] = useState<Entry[]>([]);
   const [habits, setHabits] = useState([""]);
@@ -72,26 +72,35 @@ export default function HabitTracker() {
   };
 
   return (
-    <>
-      <Card>
-        <Calendar
-          onDateSelect={handleDateSelect}
-          selectedDate={selectedDate}
-          entries={entries}
-          currentMonth={currentMonth}
-          setCurrentMonth={setCurrentMonth}
-        />
-      </Card>
-      {selectedDate && (
-        <Card className="p-6">
-          <HabitList
-            selectedDate={selectedDate}
-            done={getHabitsForDate(selectedDate)}
-            habits={habits}
-            onUpdate={handleHabitsUpdate}
-          />
-        </Card>
-      )}
-    </>
+    <main className="min-h-screen bg-gray-50 dark:bg-gray-800 p-4">
+      <div className="mx-auto max-w-6xl">
+        <header className="mb-6">
+          <h1 className="text-2xl font-bold tracking-tight text-gray-900">
+            Habit Tracker
+          </h1>
+        </header>
+
+        <div className="grid gap-4 lg:grid-cols-2">
+          <Card className="p-4">
+            <Calendar
+              onDateSelect={handleDateSelect}
+              selectedDate={selectedDate}
+              entries={entries}
+              currentMonth={currentMonth}
+              setCurrentMonth={setCurrentMonth}
+            />
+          </Card>
+
+          <Card className="p-4">
+            <HabitList
+              selectedDate={selectedDate}
+              done={getHabitsForDate(selectedDate)}
+              habits={habits}
+              onUpdate={handleHabitsUpdate}
+            />
+          </Card>
+        </div>
+      </div>
+    </main>
   );
 }

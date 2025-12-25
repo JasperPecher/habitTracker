@@ -56,28 +56,38 @@ export function Calendar({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-semibold text-gray-900">
+        <h2 className="text-lg font-semibold text-gray-900">
           {format(currentMonth, "MMMM yyyy")}
         </h2>
-        <div className="flex gap-2">
-          <Button variant="outline" size="icon" onClick={handlePrevMonth}>
+        <div className="flex gap-1">
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-8 w-8 bg-transparent"
+            onClick={handlePrevMonth}
+          >
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          <Button variant="outline" size="icon" onClick={handleNextMonth}>
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-8 w-8 bg-transparent"
+            onClick={handleNextMonth}
+          >
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-7 gap-2">
+      <div className="grid grid-cols-7 gap-1">
         {weekDays.map((day) => (
           <div
             key={day}
-            className="text-center text-sm font-medium text-gray-500"
+            className="text-center text-xs font-medium text-gray-500"
           >
-            {day}
+            {day.slice(0, 1)}
           </div>
         ))}
 
@@ -94,13 +104,13 @@ export function Calendar({
               onClick={() => !isFutureDate && onDateSelect(day)}
               disabled={isFutureDate}
               className={cn(
-                "relative aspect-square rounded-lg p-2 text-sm font-medium transition-all",
-                "hover:bg-indigo-200 dark:hover:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500",
+                "relative aspect-square rounded p-1 text-xs font-medium transition-all",
+                "hover:bg-indigo-50 dark:hover:bg-indigo-900 focus:outline-none focus:ring-1 focus:ring-indigo-500",
                 isCurrentMonth
                   ? "text-gray-900 dark:text-gray-50"
                   : "text-gray-400",
                 isSelected && "bg-indigo-600 text-white hover:bg-indigo-700",
-                isTodayDate && !isSelected && "ring-2 ring-indigo-600",
+                isTodayDate && !isSelected && "ring-1 ring-indigo-600",
                 isFutureDate &&
                   "cursor-not-allowed opacity-40 hover:bg-transparent",
                 !isSelected &&
@@ -110,21 +120,21 @@ export function Calendar({
               )}
             >
               {format(day, "d")}
-              {dayHasHabits && !isSelected && (
-                <span className="absolute bottom-1 left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-green-600" />
+              {dayHasHabits && (
+                <span className="absolute bottom-0.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-green-600" />
               )}
             </button>
           );
         })}
       </div>
 
-      <div className="flex items-center gap-4 text-sm text-gray-600">
-        <div className="flex items-center gap-2">
-          <div className="h-3 w-3 rounded-full bg-green-600" />
+      <div className="flex items-center gap-3 text-xs text-gray-600">
+        <div className="flex items-center gap-1.5">
+          <div className="h-2 w-2 rounded-full bg-green-600" />
           <span>Has habits</span>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="h-3 w-3 rounded ring-2 ring-indigo-600" />
+        <div className="flex items-center gap-1.5">
+          <div className="h-2 w-2 rounded ring-1 ring-indigo-600" />
           <span>Today</span>
         </div>
       </div>
