@@ -84,7 +84,6 @@ export default function HabitTracker() {
               setCurrentMonth={setCurrentMonth}
             />
           </Card>
-
           <Card className="p-4">
             <HabitList
               selectedDate={selectedDate}

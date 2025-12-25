@@ -30,7 +30,7 @@ export function HabitList({
   return (
     <div className="space-y-3">
       <div>
-        <h3 className="mb-1 text-lg font-semibold text-gray-900">
+        <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-gray-100">
           {format(selectedDate, "MMMM d, yyyy")}
         </h3>
         {isFutureDate ? (
