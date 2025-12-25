@@ -18,6 +18,7 @@ model Habit {
   id          Int     @id @default(autoincrement())
   name        String
   description String?
+  color       String
   entries     Entry[]
 }
 

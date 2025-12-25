@@ -24,7 +24,11 @@ interface CalendarProps {
   entries: {
     id: number;
     date: Date;
-    Habbit: { name: string };
+    Habbit: { name: string; color: string };
+  }[];
+  habits: {
+    name: string;
+    color: string;
   }[];
   currentMonth: Date;
   setCurrentMonth: (newDate: Date) => void;
@@ -34,6 +38,7 @@ export function Calendar({
   onDateSelect,
   selectedDate,
   entries,
+  habits,
   currentMonth,
   setCurrentMonth,
 }: CalendarProps) {
@@ -48,11 +53,12 @@ export function Calendar({
   const handlePrevMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
   const handleNextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
 
-  const hasHabits = (date: Date): boolean => {
+  const habitColors = (date: Date) => {
     const dateKey = format(date, "yyyy-MM-dd");
-    return entries?.some(
-      (item) => format(item?.date, "yyyy-MM-dd") === dateKey
-    );
+    const colorArray = entries
+      .filter((item) => format(item.date, "yyyy-MM-dd") === dateKey)
+      .map((item) => item.Habbit.color); // Filter by the specified date
+    return colorArray;
   };
 
   return (
@@ -96,7 +102,7 @@ export function Calendar({
           const isSelected = selectedDate && isSameDay(day, selectedDate);
           const isTodayDate = isToday(day);
           const isFutureDate = isFuture(day) && !isToday(day);
-          const dayHasHabits = hasHabits(day);
+          const dayHabitColors = habitColors(day);
 
           return (
             <button
@@ -114,15 +120,19 @@ export function Calendar({
                 isFutureDate &&
                   "cursor-not-allowed opacity-40 hover:bg-transparent",
                 !isSelected &&
-                  dayHasHabits &&
                   isCurrentMonth &&
                   "bg-slate-400 dark:bg-slate-800"
               )}
             >
-              {format(day, "d")}
-              {dayHasHabits && (
-                <span className="absolute bottom-0.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-green-600" />
-              )}
+              <span>{format(day, "d")}</span>
+              <div className="absolute inset-x-0 bottom-0.5 flex items-center justify-center gap-2">
+                {dayHabitColors.map((color) => (
+                  <span
+                    key={color}
+                    className={cn("h-1 w-1 rounded-full", `bg-${color}-600`)}
+                  />
+                ))}
+              </div>
             </button>
           );
         })}
@@ -130,8 +140,14 @@ export function Calendar({
 
       <div className="flex items-center gap-3 text-xs text-gray-600">
         <div className="flex items-center gap-1.5">
-          <div className="h-2 w-2 rounded-full bg-green-600" />
-          <span>Has habits</span>
+          {habits.map((habit) => (
+            <div key={habit.name} className="flex items-center gap-1">
+              <div
+                className={cn("h-2 w-2 rounded-full", `bg-${habit.color}-600`)}
+              />
+              <span className="mr-2">{habit.name}</span>
+            </div>
+          ))}
         </div>
         <div className="flex items-center gap-1.5">
           <div className="h-2 w-2 rounded ring-1 ring-indigo-600" />

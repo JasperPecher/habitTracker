@@ -2,7 +2,6 @@
 
 import { cn } from "@/lib/utils";
 
-import { useState } from "react";
 import { format, isFuture, isToday } from "date-fns";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "./ui/label";
@@ -10,7 +9,10 @@ import { Label } from "./ui/label";
 interface HabitListProps {
   selectedDate: Date;
   done: string[];
-  habits: string[];
+  habits: {
+    name: string;
+    color: string;
+  }[];
   onUpdate: (date: Date, habit: string) => void;
 }
 
@@ -51,23 +53,23 @@ export function HabitList({
           <div className="max-h-[450px] space-y-2 overflow-y-auto">
             {habits.map((habit) => (
               <div
-                key={habit}
+                key={habit.name}
                 className="flex items-center justify-between gap-2 rounded-lg border border-gray-200 bg-white dark:bg-black p-2 transition-colors hover:bg-gray-50"
               >
                 <div className="flex flex-1 items-center gap-2">
                   <Checkbox
-                    id={habit}
-                    checked={done.includes(habit)}
-                    onCheckedChange={() => handleToggleHabit(habit)}
+                    id={habit.name}
+                    checked={done.includes(habit.name)}
+                    onCheckedChange={() => handleToggleHabit(habit.name)}
                   />
                   <Label
-                    htmlFor={habit}
+                    htmlFor={habit.name}
                     className={cn(
                       "flex-1 cursor-pointer text-xs font-medium leading-relaxed",
-                      done.includes(habit) && "text-gray-500 line-through"
+                      done.includes(habit.name) && "text-gray-500 line-through"
                     )}
                   >
-                    {habit}
+                    {habit.name}
                   </Label>
                 </div>
               </div>

@@ -12,13 +12,17 @@ import { useRouter } from "next/navigation";
 type Entry = {
   id: number;
   date: Date;
-  Habbit: { name: string };
+  Habbit: { name: string; color: string };
 };
 
+type Habit = {
+  name: string;
+  color: string;
+};
 type ApiResponse = {
   data: {
     entries: Array<Entry>;
-    habits: string[];
+    habits: Habit[];
   };
 };
 
@@ -26,7 +30,7 @@ export default function HabitTracker() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [entries, setEntries] = useState<Entry[]>([]);
-  const [habits, setHabits] = useState([""]);
+  const [habits, setHabits] = useState<Habit[]>([]);
   const router = useRouter();
 
   const { refetch } = useQuery<ApiResponse>({
@@ -80,6 +84,7 @@ export default function HabitTracker() {
               onDateSelect={handleDateSelect}
               selectedDate={selectedDate}
               entries={entries}
+              habits={habits}
               currentMonth={currentMonth}
               setCurrentMonth={setCurrentMonth}
             />

@@ -58,7 +58,7 @@ export async function GET(req: Request) {
     select: {
       id: true,
       date: true,
-      Habbit: { select: { name: true } },
+      Habbit: { select: { name: true, color: true } },
     },
     where: {
       date: {
@@ -70,11 +70,17 @@ export async function GET(req: Request) {
   const habits = await prisma.habit.findMany({
     select: {
       name: true,
+      color: true,
     },
   });
 
   return NextResponse.json(
-    { entries: entries, habits: habits.map((item) => item.name) },
+    {
+      entries: entries,
+      habits: habits.map((item) => {
+        return { name: item.name, color: item.color };
+      }),
+    },
     { status: 200 }
   );
 }
