@@ -95,7 +95,7 @@ export function Calendar({
               disabled={isFutureDate}
               className={cn(
                 "relative aspect-square rounded-lg p-2 text-sm font-medium transition-all",
-                "hover:bg-indigo-50 dark:hover:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500",
+                "hover:bg-indigo-200 dark:hover:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500",
                 isCurrentMonth
                   ? "text-gray-900 dark:text-gray-50"
                   : "text-gray-400",
@@ -103,7 +103,10 @@ export function Calendar({
                 isTodayDate && !isSelected && "ring-2 ring-indigo-600",
                 isFutureDate &&
                   "cursor-not-allowed opacity-40 hover:bg-transparent",
-                !isSelected && dayHasHabits && isCurrentMonth && "bg-green-400"
+                !isSelected &&
+                  dayHasHabits &&
+                  isCurrentMonth &&
+                  "bg-slate-400 dark:bg-slate-800"
               )}
             >
               {format(day, "d")}

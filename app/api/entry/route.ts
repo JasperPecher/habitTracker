@@ -2,18 +2,15 @@ import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 type Entry = {
-  name: string;
+  habit: string;
   date: string;
 };
 export const POST = async (request: Request) => {
   const body: Entry = await request.json();
-  // Create Date object for the start of the specified date in UTC
-  const startDate = new Date(body.date + "T00:00:00.000Z"); // Beginning of the day in UTC
 
-  // Create Date object for the start of the next day in UTC
-  const endDate = new Date(body.date + "T00:00:00.000Z");
+  const startDate = new Date(body.date); // Beginning of the day in UTC
+  const endDate = new Date(body.date);
   endDate.setUTCDate(endDate.getUTCDate() + 1); // Move to the next day
-
   try {
     const entry = await prisma.entry.findFirst({
       where: {
@@ -21,11 +18,28 @@ export const POST = async (request: Request) => {
           gte: startDate, // Start of the specified date
           lt: endDate, // Start of the next day
         },
-        Habbit: { name: body.name },
+        Habbit: { name: body.habit },
       },
+      select: { id: true },
     });
-    console.log(entry);
 
+    if (entry !== null) {
+      await prisma.entry.delete({
+        where: { id: entry.id },
+      });
+    } else {
+      const habitId = await prisma.habit.findFirstOrThrow({
+        where: { name: body.habit },
+        select: { id: true },
+      });
+
+      await prisma.entry.create({
+        data: {
+          date: new Date(body.date),
+          habitId: habitId.id,
+        },
+      });
+    }
     return NextResponse.json(entry, { status: 201 });
   } catch (error) {
     console.log(error);
