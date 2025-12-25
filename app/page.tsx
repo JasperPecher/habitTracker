@@ -72,14 +72,8 @@ export default function HabitTracker() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-gray-800 p-4">
+    <main className="h-full bg-gray-50 dark:bg-gray-800 p-4">
       <div className="mx-auto max-w-6xl">
-        <header className="mb-6">
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900">
-            Habit Tracker
-          </h1>
-        </header>
-
         <div className="grid gap-4 lg:grid-cols-2">
           <Card className="p-4">
             <Calendar
