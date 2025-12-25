@@ -16,7 +16,7 @@ datasource db {
 
 model Habit {
   id          Int     @id @default(autoincrement())
-  name        String
+  name        String  @unique
   description String?
   color       String
   entries     Entry[]

@@ -129,7 +129,8 @@ export function Calendar({
                 {dayHabitColors.map((color) => (
                   <span
                     key={color}
-                    className={cn("h-1 w-1 rounded-full", `bg-${color}-600`)}
+                    className="h-1 w-1 rounded-full"
+                    style={{ backgroundColor: color }}
                   />
                 ))}
               </div>
@@ -143,7 +144,8 @@ export function Calendar({
           {habits.map((habit) => (
             <div key={habit.name} className="flex items-center gap-1">
               <div
-                className={cn("h-2 w-2 rounded-full", `bg-${habit.color}-600`)}
+                className="h-2 w-2 rounded-full"
+                style={{ backgroundColor: habit.color }}
               />
               <span className="mr-2">{habit.name}</span>
             </div>

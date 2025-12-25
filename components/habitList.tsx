@@ -50,7 +50,7 @@ export function HabitList({
         </div>
       ) : (
         <>
-          <div className="max-h-[450px] space-y-2 overflow-y-auto">
+          <div className="max-h-112 space-y-2 overflow-y-auto">
             {habits.map((habit) => (
               <div
                 key={habit.name}

@@ -7,6 +7,7 @@ import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ModeToggle } from "./themeToggle";
+import { AddHabit } from "../addHabit";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -22,18 +23,7 @@ export default function Navbar() {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6">
-          <Link
-            href="/"
-            className="text-sm font-medium transition-colors hover:text-primary"
-          >
-            Home
-          </Link>
-          <Link
-            href="/features"
-            className="text-sm font-medium transition-colors hover:text-primary"
-          >
-            Hinzufügen
-          </Link>
+          <AddHabit />
 
           <ModeToggle />
         </nav>
@@ -52,22 +42,8 @@ export default function Navbar() {
           </SheetTrigger>
           <SheetContent side="right" className="w-[80%] sm:w-87.5">
             <div className="flex flex-col gap-6 pt-6 mx-10">
-              <Link
-                href="/"
-                className="text-lg font-medium transition-colors hover:text-primary"
-                onClick={() => setIsOpen(false)}
-              >
-                Home
-              </Link>
-              <Link
-                href="/features"
-                className="text-lg font-medium transition-colors hover:text-primary"
-                onClick={() => setIsOpen(false)}
-              >
-                Hinzufügen
-              </Link>
+              <AddHabit />
               <ModeToggle />
-
               <div className="flex flex-col gap-2 mt-4">
                 <Button
                   className="w-full justify-start"
