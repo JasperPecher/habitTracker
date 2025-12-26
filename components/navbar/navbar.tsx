@@ -17,7 +17,7 @@ export default function Navbar() {
       <div className="mx-10 flex h-16 items-center justify-between">
         <div className="flex items-center gap-2">
           <Link href="/" className="font-bold text-xl">
-            Habbit tracker
+            Habit tracker
           </Link>
         </div>
 
