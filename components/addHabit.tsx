@@ -29,7 +29,6 @@ export function AddHabit() {
   const [type, setType] = useState("boolean");
   const [hue, setHue] = useState(getRandomHue());
   const [color, setColor] = useState(`hsl(${hue}, 100%, 50%)`); // Start with a random color
-  const router = useRouter();
 
   const handleChange = (value: number) => {
     setHue(value);
@@ -49,7 +48,7 @@ export function AddHabit() {
       console.log(error);
     } finally {
       setOpen(false);
-      router.refresh();
+      window.location.reload();
     }
   };
 
