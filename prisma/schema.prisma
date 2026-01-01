@@ -19,6 +19,7 @@ model Habit {
   name        String  @unique
   description String?
   color       String
+  type        String  @default("boolean")
   entries     Entry[]
 }
 
@@ -27,6 +28,7 @@ model Entry {
   habitId Int
   Habbit  Habit    @relation(fields: [habitId], references: [id])
   date    DateTime @default(now())
+  counter Int?
 }
 
 model User {

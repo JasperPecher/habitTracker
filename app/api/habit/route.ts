@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 type Habit = {
   name: string;
   color: string;
+  type: string;
 };
 export const POST = async (request: Request) => {
   const auth = await authAPIProvider();
@@ -20,6 +21,7 @@ export const POST = async (request: Request) => {
       data: {
         name: body.name,
         color: body.color,
+        type: body.type,
       },
     });
     return NextResponse.json(habit, { status: 201 });

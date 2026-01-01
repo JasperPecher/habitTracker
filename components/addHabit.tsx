@@ -13,12 +13,20 @@ import { Label } from "@/components/ui/label";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 const getRandomHue = () => Math.floor(Math.random() * 361); // Generate a random hue between 0 and 360
 
 export function AddHabit() {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
+  const [type, setType] = useState("boolean");
   const [hue, setHue] = useState(getRandomHue());
   const [color, setColor] = useState(`hsl(${hue}, 100%, 50%)`); // Start with a random color
   const router = useRouter();
@@ -35,6 +43,7 @@ export function AddHabit() {
       await axios.post("/api/habit", {
         name: name,
         color: color,
+        type: type,
       });
     } catch (error) {
       console.log(error);
@@ -64,6 +73,16 @@ export function AddHabit() {
                 required
               />
             </div>
+            <Select onValueChange={setType} value={type}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Art" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="boolean">Boolean</SelectItem>
+                <SelectItem value="counter">Zähler</SelectItem>
+                <SelectItem value="distance">Distanz</SelectItem>
+              </SelectContent>
+            </Select>
             <div className="grid gap-3">
               <Label htmlFor="Farbe">Farbe</Label>
               <input
