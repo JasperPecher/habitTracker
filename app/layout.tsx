@@ -3,6 +3,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/themeProvider";
 import Navbar from "@/components/navbar/navbar";
 import QueryProvider from "@/components/queryProvider";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Jaspers habit tracker",
@@ -27,6 +28,7 @@ export default function RootLayout({
             <Navbar />
             <main className="flex-1">{children}</main>
           </QueryProvider>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

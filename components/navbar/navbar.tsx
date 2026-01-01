@@ -8,9 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ModeToggle } from "./themeToggle";
 import { AddHabit } from "../addHabit";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = React.useState(false);
+  const { data: session } = authClient.useSession();
+  const router = useRouter();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background">
@@ -24,12 +28,13 @@ export default function Navbar() {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6">
           <AddHabit />
-
           <ModeToggle />
         </nav>
 
         <div className="hidden md:flex items-center gap-4">
-          <Button size="sm">Log In</Button>
+          <Button size="sm" onClick={() => router.push("/auth")}>
+            {session ? session.user.displayUsername : "Log In"}
+          </Button>
         </div>
 
         {/* Mobile Navigation */}

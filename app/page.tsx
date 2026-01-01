@@ -8,6 +8,7 @@ import { Calendar } from "@/components/calendar";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+// import { authClient } from "@/lib/auth-client";
 
 type Entry = {
   id: number;
