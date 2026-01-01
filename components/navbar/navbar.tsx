@@ -52,9 +52,9 @@ export default function Navbar() {
               <div className="flex flex-col gap-2 mt-4">
                 <Button
                   className="w-full justify-start"
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => router.push("/auth")}
                 >
-                  Log In
+                  {session ? session.user.displayUsername : "Log In"}
                 </Button>
               </div>
             </div>

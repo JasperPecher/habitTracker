@@ -17,6 +17,7 @@ import { authClient } from "@/lib/auth-client";
 import { useSessionQuery } from "@/lib/authSessionQuery";
 import { toast } from "sonner";
 import { useSignOutMutation } from "@/lib/signOutMutation";
+import { useRouter } from "next/navigation";
 
 // need to disableSignup to false in auth.ts
 // const { data, error } = await authClient.signUp.email(
@@ -46,6 +47,13 @@ export default function Page() {
   const [loading, startTransition] = useTransition();
   const { data: session, isPending, error } = useSessionQuery();
   const signOutMutation = useSignOutMutation();
+  const router = useRouter();
+
+  const onEnterDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key == "Enter") {
+      handleLogin();
+    }
+  };
 
   const handleLogin = async () => {
     startTransition(async () => {
@@ -53,7 +61,7 @@ export default function Page() {
         {
           username,
           password,
-          callbackURL: "/auth",
+          callbackURL: "/",
         },
         {
           onError: (ctx) => {
@@ -63,7 +71,7 @@ export default function Page() {
             toast.success("Successfully logged in!");
             setUsername("");
             setPassword("");
-            window.location.reload();
+            router.push("/");
           },
         }
       );
@@ -105,6 +113,9 @@ export default function Page() {
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  onKeyDown={(e) => {
+                    onEnterDown(e);
+                  }}
                 />
               </div>
             </div>
