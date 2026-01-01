@@ -1,3 +1,4 @@
+import { authAPIProvider } from "@/lib/authAPIProvider";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
@@ -6,6 +7,12 @@ type Habit = {
   color: string;
 };
 export const POST = async (request: Request) => {
+  const auth = await authAPIProvider();
+  if (auth === false) {
+    return NextResponse.json("You are not authenticated!", {
+      status: 401,
+    });
+  }
   const body: Habit = await request.json();
 
   try {

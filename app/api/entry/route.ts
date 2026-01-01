@@ -1,3 +1,4 @@
+import { authAPIProvider } from "@/lib/authAPIProvider";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
@@ -7,7 +8,12 @@ type Entry = {
 };
 export const POST = async (request: Request) => {
   const body: Entry = await request.json();
-
+  const auth = await authAPIProvider();
+  if (auth === false) {
+    return NextResponse.json("You are not authenticated!", {
+      status: 401,
+    });
+  }
   const startDate = new Date(body.date); // Beginning of the day in UTC
   const endDate = new Date(body.date);
   endDate.setUTCDate(endDate.getUTCDate() + 1); // Move to the next day
@@ -47,6 +53,12 @@ export const POST = async (request: Request) => {
 };
 
 export async function GET(req: Request) {
+  const auth = await authAPIProvider();
+  if (auth === false) {
+    return NextResponse.json("You are not authenticated!", {
+      status: 401,
+    });
+  }
   const url = new URL(req.url);
   const month = Number(url.searchParams.get("month"));
   const year = Number(url.searchParams.get("year"));
