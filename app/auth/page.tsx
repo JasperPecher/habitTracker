@@ -18,6 +18,7 @@ import { useSessionQuery } from "@/lib/authSessionQuery";
 import { toast } from "sonner";
 import { useSignOutMutation } from "@/lib/signOutMutation";
 
+// need to disableSignup to false in auth.ts
 // const { data, error } = await authClient.signUp.email(
 //   {
 //     email: "name@domain.test",
