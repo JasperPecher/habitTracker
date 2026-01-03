@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 type Entry = {
   habit: string;
   date: string;
+  value: number;
 };
 export const POST = async (request: Request) => {
   const body: Entry = await request.json();
@@ -14,6 +15,7 @@ export const POST = async (request: Request) => {
       status: 401,
     });
   }
+
   const startDate = new Date(body.date); // Beginning of the day in UTC
   const endDate = new Date(body.date);
   endDate.setUTCDate(endDate.getUTCDate() + 1); // Move to the next day
@@ -24,14 +26,23 @@ export const POST = async (request: Request) => {
           gte: startDate, // Start of the specified date
           lt: endDate, // Start of the next day
         },
-        Habbit: { name: body.habit },
+        Habit: { name: body.habit },
       },
-      select: { id: true },
+      select: { id: true, value: true, Habit: { select: { type: true } } },
     });
 
-    if (entry !== null) {
+    if (entry !== null && entry.Habit.type === "boolean") {
       await prisma.entry.delete({
         where: { id: entry.id },
+      });
+    } else if (
+      entry !== null &&
+      entry.Habit.type === "counter" &&
+      entry.value != null
+    ) {
+      await prisma.entry.update({
+        where: { id: entry.id },
+        data: { value: entry.value + body.value },
       });
     } else {
       const habitId = await prisma.habit.findFirstOrThrow({
@@ -70,7 +81,8 @@ export async function GET(req: Request) {
     select: {
       id: true,
       date: true,
-      Habbit: { select: { name: true, color: true } },
+      value: true,
+      Habit: { select: { name: true, color: true, type: true } },
     },
     where: {
       date: {
@@ -83,15 +95,14 @@ export async function GET(req: Request) {
     select: {
       name: true,
       color: true,
+      type: true,
     },
   });
 
   return NextResponse.json(
     {
       entries: entries,
-      habits: habits.map((item) => {
-        return { name: item.name, color: item.color };
-      }),
+      habits: habits,
     },
     { status: 200 }
   );

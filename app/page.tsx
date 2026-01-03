@@ -8,17 +8,18 @@ import { Calendar } from "@/components/calendar";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-// import { authClient } from "@/lib/auth-client";
 
 type Entry = {
   id: number;
   date: Date;
-  Habbit: { name: string; color: string };
+  value: number;
+  Habit: { name: string; color: string; type: string };
 };
 
 type Habit = {
   name: string;
   color: string;
+  type: string;
 };
 type ApiResponse = {
   data: {
@@ -53,12 +54,17 @@ export default function HabitTracker() {
     setSelectedDate(date);
   };
 
-  const handleHabitsUpdate = async (date: Date, habit: string) => {
+  const handleHabitsUpdate = async (
+    date: Date,
+    habit: string,
+    value?: number
+  ) => {
     const dateKey = format(date, "yyyy-MM-dd");
     try {
       await axios.post("/api/entry", {
         date: dateKey,
         habit: habit,
+        value: value,
       });
     } catch (error) {
       console.log(error);
@@ -68,11 +74,11 @@ export default function HabitTracker() {
     }
   };
 
-  const getHabitsForDate = (date: Date): string[] => {
+  const getHabitsForDate = (date: Date) => {
     const dateKey = format(date, "yyyy-MM-dd");
     const doneHabits = entries
       .filter((item) => format(item.date, "yyyy-MM-dd") === dateKey) // Filter by the specified date
-      .map((item) => item.Habbit.name);
+      .map((item) => item);
     return doneHabits;
   };
 

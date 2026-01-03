@@ -24,7 +24,7 @@ interface CalendarProps {
   entries: {
     id: number;
     date: Date;
-    Habbit: { name: string; color: string };
+    Habit: { name: string; color: string };
   }[];
   habits: {
     name: string;
@@ -57,7 +57,7 @@ export function Calendar({
     const dateKey = format(date, "yyyy-MM-dd");
     const colorArray = entries
       .filter((item) => format(item.date, "yyyy-MM-dd") === dateKey)
-      .map((item) => item.Habbit.color); // Filter by the specified date
+      .map((item) => item.Habit.color); // Filter by the specified date
     return colorArray;
   };
 

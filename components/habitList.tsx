@@ -5,15 +5,22 @@ import { cn } from "@/lib/utils";
 import { format, isFuture, isToday } from "date-fns";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "./ui/label";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
+import { Minus, Plus, Save } from "lucide-react";
 
 interface HabitListProps {
   selectedDate: Date;
-  done: string[];
+  done: {
+    Habit: { name: string; color: string; type: string };
+    value: number;
+  }[];
   habits: {
     name: string;
     color: string;
+    type: string;
   }[];
-  onUpdate: (date: Date, habit: string) => void;
+  onUpdate: (date: Date, habit: string, value?: number) => void;
 }
 
 export function HabitList({
@@ -29,6 +36,19 @@ export function HabitList({
     onUpdate(selectedDate, habit);
   };
 
+  const handlePlusCounterHabit = (habit: string) => {
+    if (isFutureDate) return;
+    onUpdate(selectedDate, habit, 1);
+  };
+  const handleMinusCounterHabit = (habit: string) => {
+    if (isFutureDate) return;
+    onUpdate(selectedDate, habit, -1);
+  };
+
+  const handleDistanceHabit = (habit: string) => {
+    if (isFutureDate) return;
+    onUpdate(selectedDate, habit);
+  };
   return (
     <div className="space-y-3">
       <div>
@@ -57,20 +77,83 @@ export function HabitList({
                 className="flex items-center justify-between gap-2 rounded-lg border border-gray-200 bg-white dark:bg-black p-2 transition-colors hover:bg-gray-50"
               >
                 <div className="flex flex-1 items-center gap-2">
-                  <Checkbox
-                    id={habit.name}
-                    checked={done.includes(habit.name)}
-                    onCheckedChange={() => handleToggleHabit(habit.name)}
-                  />
-                  <Label
-                    htmlFor={habit.name}
-                    className={cn(
-                      "flex-1 cursor-pointer text-xs font-medium leading-relaxed",
-                      done.includes(habit.name) && "text-gray-500 line-through"
-                    )}
-                  >
-                    {habit.name}
-                  </Label>
+                  {habit.type === "boolean" ? (
+                    <>
+                      <Checkbox
+                        id={habit.name}
+                        className="cursor-pointer"
+                        checked={done.some(
+                          (item) => item.Habit.name === habit.name
+                        )}
+                        onCheckedChange={() => handleToggleHabit(habit.name)}
+                      />
+                      <Label
+                        htmlFor={habit.name}
+                        className={cn(
+                          "flex-1 cursor-pointer text-xs font-medium leading-relaxed",
+                          done.some((item) => item.Habit.name === habit.name) &&
+                            "text-gray-500 line-through"
+                        )}
+                      >
+                        {habit.name}
+                      </Label>
+                    </>
+                  ) : habit.type === "counter" ? (
+                    <>
+                      <span className="text-xs">
+                        {
+                          done.filter(
+                            (item) => item.Habit.name === habit.name
+                          )[0]?.value
+                        }
+                      </span>
+
+                      <Label
+                        htmlFor={habit.name}
+                        className="flex-1 text-xs font-medium leading-relaxed"
+                      >
+                        {habit.name}
+                      </Label>
+                      <Button
+                        className="w-5 h-5"
+                        onClick={() => handlePlusCounterHabit(habit.name)}
+                      >
+                        <Plus />
+                      </Button>
+                      <Button
+                        className="w-5 h-5"
+                        onClick={() => handleMinusCounterHabit(habit.name)}
+                      >
+                        <Minus />
+                      </Button>
+                    </>
+                  ) : habit.type === "distance" ? (
+                    <>
+                      <Label
+                        htmlFor={habit.name}
+                        className="flex-1 text-xs font-medium leading-relaxed"
+                      >
+                        {habit.name}
+                      </Label>
+                      <form onSubmit={(e) => handleDistanceHabit(habit.name)}>
+                        <Input
+                          type="text"
+                          placeholder="km"
+                          className="w-15 mr-1"
+                        />
+                        <Button className="w-5 h-5" type="submit">
+                          <Save />
+                        </Button>
+                      </form>
+                    </>
+                  ) : (
+                    <Label
+                      htmlFor={habit.name}
+                      className="flex-1 text-xs font-medium leading-relaxed"
+                    >
+                      {habit.name}
+                    </Label>
+                  )}
                 </div>
               </div>
             ))}

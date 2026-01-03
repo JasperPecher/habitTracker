@@ -26,9 +26,9 @@ model Habit {
 model Entry {
   id      Int      @id @default(autoincrement())
   habitId Int
-  Habbit  Habit    @relation(fields: [habitId], references: [id])
+  Habit   Habit    @relation(fields: [habitId], references: [id])
   date    DateTime @default(now())
-  counter Int?
+  value   Int?
 }
 
 model User {
