@@ -54,6 +54,7 @@ export const POST = async (request: Request) => {
         data: {
           date: new Date(body.date),
           habitId: habitId.id,
+          value: body.value,
         },
       });
     }

@@ -116,15 +116,15 @@ export function HabitList({
                       </Label>
                       <Button
                         className="w-5 h-5"
-                        onClick={() => handlePlusCounterHabit(habit.name)}
-                      >
-                        <Plus />
-                      </Button>
-                      <Button
-                        className="w-5 h-5"
                         onClick={() => handleMinusCounterHabit(habit.name)}
                       >
                         <Minus />
+                      </Button>
+                      <Button
+                        className="w-5 h-5"
+                        onClick={() => handlePlusCounterHabit(habit.name)}
+                      >
+                        <Plus />
                       </Button>
                     </>
                   ) : habit.type === "distance" ? (
