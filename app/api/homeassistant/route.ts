@@ -1,25 +1,31 @@
-import { authAPIProvider } from "@/lib/authAPIProvider";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 type Entry = {
   habit: string;
-  date: string;
+
   value: number;
+  username: string;
+  secret: string;
 };
 export const POST = async (request: Request) => {
   const body: Entry = await request.json();
-  const auth = await authAPIProvider();
-  if (auth === false) {
+  if (body.secret !== process.env.HOMEASSISTANT_SECRET) {
     return NextResponse.json("You are not authenticated!", {
       status: 401,
     });
   }
 
-  const startDate = new Date(body.date); // Beginning of the day in UTC
-  const endDate = new Date(body.date);
+  const startDate = new Date(); // Beginning of the day in UTC
+  const endDate = new Date();
   endDate.setUTCDate(endDate.getUTCDate() + 1); // Move to the next day
   try {
+    const user = await prisma.user.findFirst({
+      where: {
+        username: body.username,
+      },
+      select: { id: true },
+    });
     const entry = await prisma.entry.findFirst({
       where: {
         date: {
@@ -27,7 +33,7 @@ export const POST = async (request: Request) => {
           lt: endDate, // Start of the next day
         },
         Habit: { name: body.habit },
-        userId: auth.user.id,
+        userId: user?.id,
       },
       select: { id: true, value: true, Habit: { select: { type: true } } },
     });
@@ -53,10 +59,10 @@ export const POST = async (request: Request) => {
 
       await prisma.entry.create({
         data: {
-          date: new Date(body.date),
+          date: new Date(),
           habitId: habitId.id,
           value: body.value,
-          userId: auth.user.id,
+          userId: user?.id || "unknown",
         },
       });
     }
@@ -65,49 +71,3 @@ export const POST = async (request: Request) => {
     console.log(error);
   }
 };
-
-export async function GET(req: Request) {
-  const auth = await authAPIProvider();
-  if (auth === false) {
-    return NextResponse.json("You are not authenticated!", {
-      status: 401,
-    });
-  }
-  const url = new URL(req.url);
-  const month = Number(url.searchParams.get("month"));
-  const year = Number(url.searchParams.get("year"));
-
-  const startDate = new Date(Date.UTC(year, month, 1));
-  const endDate = new Date(Date.UTC(year, month + 1, 1));
-
-  const entries = await prisma.entry.findMany({
-    select: {
-      id: true,
-      date: true,
-      value: true,
-      Habit: { select: { name: true, color: true, type: true } },
-    },
-    where: {
-      date: {
-        gte: startDate, // greater than or equal to start of month
-        lt: endDate, // less than start of next month } },
-      },
-      userId: auth.user.id,
-    },
-  });
-  const habits = await prisma.habit.findMany({
-    select: {
-      name: true,
-      color: true,
-      type: true,
-    },
-  });
-
-  return NextResponse.json(
-    {
-      entries: entries,
-      habits: habits,
-    },
-    { status: 200 }
-  );
-}
