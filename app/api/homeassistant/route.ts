@@ -56,7 +56,6 @@ export const POST = async (request: Request) => {
         where: { name: body.habit },
         select: { id: true },
       });
-      console.log(entry);
 
       await prisma.entry.create({
         data: {
