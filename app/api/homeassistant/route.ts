@@ -3,7 +3,6 @@ import { NextResponse } from "next/server";
 
 type Entry = {
   habit: string;
-
   value: number;
   username: string;
   secret: string;
@@ -16,9 +15,10 @@ export const POST = async (request: Request) => {
     });
   }
 
-  const startDate = new Date(); // Beginning of the day in UTC
-  const endDate = new Date();
-  endDate.setUTCDate(endDate.getUTCDate() + 1); // Move to the next day
+  const endDate = new Date(); // Beginning of the day in UTC
+  const startDate = new Date();
+  startDate.setUTCDate(startDate.getUTCDate() - 1); // Move to the previous day
+
   try {
     const user = await prisma.user.findFirst({
       where: {
@@ -56,6 +56,7 @@ export const POST = async (request: Request) => {
         where: { name: body.habit },
         select: { id: true },
       });
+      console.log(entry);
 
       await prisma.entry.create({
         data: {
