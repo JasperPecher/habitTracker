@@ -6,7 +6,7 @@ export const authAPIProvider = async () => {
     headers: await headers(), // you need to pass the headers object.
   });
   if (session) {
-    return true;
+    return session;
   } else {
     return false;
   }

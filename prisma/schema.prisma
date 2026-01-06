@@ -29,6 +29,8 @@ model Entry {
   Habit   Habit    @relation(fields: [habitId], references: [id])
   date    DateTime @default(now())
   value   Int?
+  userId  String
+  user    User     @relation(fields: [userId], references: [id])
 }
 
 model User {
@@ -43,6 +45,7 @@ model User {
   displayUsername String?
   sessions        Session[]
   accounts        Account[]
+  entries         Entry[]
 
   @@unique([username])
   @@map("user")

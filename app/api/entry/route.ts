@@ -55,6 +55,7 @@ export const POST = async (request: Request) => {
           date: new Date(body.date),
           habitId: habitId.id,
           value: body.value,
+          userId: auth.user.id,
         },
       });
     }
@@ -90,6 +91,7 @@ export async function GET(req: Request) {
         gte: startDate, // greater than or equal to start of month
         lt: endDate, // less than start of next month } },
       },
+      userId: auth.user.id,
     },
   });
   const habits = await prisma.habit.findMany({
