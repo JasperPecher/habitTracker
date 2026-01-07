@@ -28,7 +28,7 @@ model Entry {
   habitId Int
   Habit   Habit    @relation(fields: [habitId], references: [id])
   date    DateTime @default(now())
-  value   Int?
+  value   Float?
   userId  String
   user    User     @relation(fields: [userId], references: [id])
 }

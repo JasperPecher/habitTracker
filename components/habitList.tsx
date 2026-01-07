@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn, convertToFloat } from "@/lib/utils";
 
 import { format, isFuture, isToday } from "date-fns";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -8,6 +8,7 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Minus, Plus, Save } from "lucide-react";
+import { useState } from "react";
 
 interface HabitListProps {
   selectedDate: Date;
@@ -29,6 +30,7 @@ export function HabitList({
   habits,
   onUpdate,
 }: HabitListProps) {
+  const [distance, setDistance] = useState(0);
   const isFutureDate = isFuture(selectedDate) && !isToday(selectedDate);
 
   const handleToggleHabit = (habit: string) => {
@@ -47,7 +49,7 @@ export function HabitList({
 
   const handleDistanceHabit = (habit: string) => {
     if (isFutureDate) return;
-    onUpdate(selectedDate, habit);
+    onUpdate(selectedDate, habit, distance);
   };
   return (
     <div className="space-y-3">
@@ -140,6 +142,9 @@ export function HabitList({
                           type="text"
                           placeholder="km"
                           className="w-15 mr-1"
+                          onChange={(e) =>
+                            setDistance(Number(convertToFloat(e.target.value)))
+                          }
                         />
                         <Button className="w-5 h-5" type="submit">
                           <Save />

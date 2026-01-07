@@ -52,6 +52,15 @@ export const POST = async (request: Request) => {
         where: { id: entry.id },
         data: { value: entry.value + body.value },
       });
+    } else if (
+      entry !== null &&
+      entry?.Habit.type === "distance" &&
+      entry.value != null
+    ) {
+      await prisma.entry.update({
+        where: { id: entry.id },
+        data: { value: entry.value + body.value },
+      });
     } else {
       const habitId = await prisma.habit.findFirstOrThrow({
         where: { name: body.habit },
