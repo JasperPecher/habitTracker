@@ -32,7 +32,6 @@ export function HabitList({
 }: HabitListProps) {
   const [distance, setDistance] = useState(0);
   const isFutureDate = isFuture(selectedDate) && !isToday(selectedDate);
-
   const handleToggleHabit = (habit: string) => {
     if (isFutureDate) return;
     onUpdate(selectedDate, habit);
@@ -141,9 +140,14 @@ export function HabitList({
                         <Input
                           type="text"
                           placeholder="km"
-                          className="w-15 mr-1"
+                          className="w-17 mr-1"
                           onChange={(e) =>
                             setDistance(Number(convertToFloat(e.target.value)))
+                          }
+                          defaultValue={
+                            done
+                              .find((item) => item.Habit.name === habit.name)
+                              ?.value.toFixed(2) || ""
                           }
                         />
                         <Button className="w-5 h-5" type="submit">
