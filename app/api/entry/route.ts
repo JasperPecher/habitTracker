@@ -54,7 +54,7 @@ export const POST = async (request: Request) => {
     ) {
       await prisma.entry.update({
         where: { id: entry.id },
-        data: { value: entry.value + body.value },
+        data: { value: body.value },
       });
     } else {
       const habitId = await prisma.habit.findFirstOrThrow({

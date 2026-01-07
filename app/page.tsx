@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { format } from "date-fns";
 import { HabitList } from "@/components/habitList";
@@ -33,6 +33,7 @@ export default function HabitTracker() {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [entries, setEntries] = useState<Entry[]>([]);
   const [habits, setHabits] = useState<Habit[]>([]);
+  const [done, setDone] = useState<Entry[]>([]);
   const router = useRouter();
 
   const { refetch } = useQuery<ApiResponse>({
@@ -52,6 +53,7 @@ export default function HabitTracker() {
 
   const handleDateSelect = (date: Date) => {
     setSelectedDate(date);
+    setHabitsForDate(date);
   };
 
   const handleHabitsUpdate = async (
@@ -73,13 +75,20 @@ export default function HabitTracker() {
     }
   };
 
-  const getHabitsForDate = (date: Date) => {
-    const dateKey = format(date, "yyyy-MM-dd");
-    const doneHabits = entries
-      .filter((item) => format(item.date, "yyyy-MM-dd") === dateKey) // Filter by the specified date
-      .map((item) => item);
-    return doneHabits;
-  };
+  const setHabitsForDate = useCallback(
+    (date: Date) => {
+      const dateKey = format(date, "yyyy-MM-dd");
+      const doneHabits = entries
+        .filter((item) => format(item.date, "yyyy-MM-dd") === dateKey) // Filter by the specified date
+        .map((item) => item);
+      setDone(doneHabits);
+    },
+    [entries]
+  );
+
+  useEffect(() => {
+    setHabitsForDate(selectedDate);
+  }, [setHabitsForDate, selectedDate]);
 
   return (
     <main className="h-full bg-gray-50 dark:bg-gray-800 p-4">
@@ -98,7 +107,8 @@ export default function HabitTracker() {
           <Card className="p-4">
             <HabitList
               selectedDate={selectedDate}
-              done={getHabitsForDate(selectedDate)}
+              done={done}
+              setDone={setDone}
               habits={habits}
               onUpdate={handleHabitsUpdate}
             />

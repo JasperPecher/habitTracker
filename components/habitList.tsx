@@ -13,9 +13,19 @@ import { useState } from "react";
 interface HabitListProps {
   selectedDate: Date;
   done: {
+    id: number;
+    date: Date;
     Habit: { name: string; color: string; type: string };
     value: number;
   }[];
+  setDone: (
+    done: {
+      id: number;
+      date: Date;
+      Habit: { name: string; color: string; type: string };
+      value: number;
+    }[]
+  ) => void;
   habits: {
     name: string;
     color: string;
@@ -27,14 +37,34 @@ interface HabitListProps {
 export function HabitList({
   selectedDate,
   done,
+  setDone,
   habits,
   onUpdate,
 }: HabitListProps) {
-  const [distance, setDistance] = useState(0);
   const isFutureDate = isFuture(selectedDate) && !isToday(selectedDate);
   const handleToggleHabit = (habit: string) => {
     if (isFutureDate) return;
     onUpdate(selectedDate, habit);
+  };
+
+  const handleDistanceInputChange = (newValue: number, habitName: string) => {
+    if (isFutureDate) return;
+    const updatedValues = [...done];
+    const index = updatedValues.findIndex(
+      (item) => item.Habit.name === habitName
+    );
+
+    if (index === -1) {
+      updatedValues.push({
+        id: 1,
+        date: new Date(),
+        value: newValue,
+        Habit: { color: "", name: habitName, type: "distance" },
+      });
+    } else {
+      updatedValues[index].value = newValue; // Update the specific index
+    }
+    setDone(updatedValues);
   };
 
   const handlePlusCounterHabit = (habit: string) => {
@@ -45,11 +75,13 @@ export function HabitList({
     if (isFutureDate) return;
     onUpdate(selectedDate, habit, -1);
   };
-
   const handleDistanceHabit = (habit: string) => {
     if (isFutureDate) return;
-    onUpdate(selectedDate, habit, distance);
+    const newValueIndex = done.findIndex((item) => item.Habit.name === habit);
+
+    onUpdate(selectedDate, habit, done[newValueIndex].value);
   };
+
   return (
     <div className="space-y-3">
       <div>
@@ -102,11 +134,9 @@ export function HabitList({
                   ) : habit.type === "counter" ? (
                     <>
                       <span className="text-xs">
-                        {
-                          done.filter(
-                            (item) => item.Habit.name === habit.name
-                          )[0]?.value
-                        }
+                        {done.filter(
+                          (item) => item.Habit.name === habit.name
+                        )[0]?.value || 0}
                       </span>
 
                       <Label
@@ -136,13 +166,16 @@ export function HabitList({
                       >
                         {habit.name}
                       </Label>
-                      <form onSubmit={(e) => handleDistanceHabit(habit.name)}>
+                      <form onSubmit={() => handleDistanceHabit(habit.name)}>
                         <Input
                           type="text"
                           placeholder="km"
                           className="w-17 mr-1"
                           onChange={(e) =>
-                            setDistance(Number(convertToFloat(e.target.value)))
+                            handleDistanceInputChange(
+                              Number(convertToFloat(e.target.value)),
+                              habit.name
+                            )
                           }
                           defaultValue={
                             done
