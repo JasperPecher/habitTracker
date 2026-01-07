@@ -16,9 +16,11 @@ export const POST = async (request: Request) => {
     });
   }
 
-  const startDate = new Date(body.date); // Beginning of the day in UTC
+  const startDate = new Date(body.date);
+  startDate.setHours(0, 0, 0, 0); // Beginning of the day in UTC
   const endDate = new Date(body.date);
-  endDate.setUTCDate(endDate.getUTCDate() + 1); // Move to the next day
+  endDate.setHours(24, 0, 0, 0); // End of the day in UTC
+
   try {
     const entry = await prisma.entry.findFirst({
       where: {

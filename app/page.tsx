@@ -59,10 +59,9 @@ export default function HabitTracker() {
     habit: string,
     value?: number
   ) => {
-    const dateKey = format(date, "yyyy-MM-dd");
     try {
       await axios.post("/api/entry", {
-        date: dateKey,
+        date: date,
         habit: habit,
         value: value,
       });

@@ -15,9 +15,10 @@ export const POST = async (request: Request) => {
     });
   }
 
-  const endDate = new Date(); // Beginning of the day in UTC
   const startDate = new Date();
-  startDate.setUTCDate(startDate.getUTCDate() - 1); // Move to the previous day
+  startDate.setHours(0, 0, 0, 0); // Beginning of the day in UTC
+  const endDate = new Date();
+  endDate.setHours(24, 0, 0, 0); // End of the day in UTC
 
   try {
     const user = await prisma.user.findFirst({
