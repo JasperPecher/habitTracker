@@ -8,7 +8,6 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Minus, Plus, Save } from "lucide-react";
-import { useState } from "react";
 
 interface HabitListProps {
   selectedDate: Date;
@@ -61,6 +60,7 @@ export function HabitList({
         value: newValue,
         Habit: { color: "", name: habitName, type: "distance" },
       });
+      console.log(new Date());
     } else {
       updatedValues[index].value = newValue; // Update the specific index
     }
