@@ -59,8 +59,10 @@ export default function HabitTracker() {
   const handleHabitsUpdate = async (
     date: Date,
     habit: string,
-    value?: number
+    value?: number,
   ) => {
+    console.log(date);
+
     try {
       await axios.post("/api/entry", {
         date: date,
@@ -83,7 +85,7 @@ export default function HabitTracker() {
         .map((item) => item);
       setDone(doneHabits);
     },
-    [entries]
+    [entries],
   );
 
   useEffect(() => {

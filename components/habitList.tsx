@@ -47,8 +47,6 @@ export function HabitList({
   };
 
   const handleDistanceInputChange = (newValue: number, habitName: string) => {
-    console.log(selectedDate);
-
     if (isFutureDate) return;
     const updatedValues = [...done];
     const index = updatedValues.findIndex(
