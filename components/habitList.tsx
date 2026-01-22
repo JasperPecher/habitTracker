@@ -23,7 +23,7 @@ interface HabitListProps {
       date: Date;
       Habit: { name: string; color: string; type: string };
       value: number;
-    }[]
+    }[],
   ) => void;
   habits: {
     name: string;
@@ -47,10 +47,12 @@ export function HabitList({
   };
 
   const handleDistanceInputChange = (newValue: number, habitName: string) => {
+    console.log(selectedDate);
+
     if (isFutureDate) return;
     const updatedValues = [...done];
     const index = updatedValues.findIndex(
-      (item) => item.Habit.name === habitName
+      (item) => item.Habit.name === habitName,
     );
 
     if (index === -1) {
@@ -60,7 +62,6 @@ export function HabitList({
         value: newValue,
         Habit: { color: "", name: habitName, type: "distance" },
       });
-      console.log(new Date());
     } else {
       updatedValues[index].value = newValue; // Update the specific index
     }
@@ -116,7 +117,7 @@ export function HabitList({
                         id={habit.name}
                         className="cursor-pointer"
                         checked={done.some(
-                          (item) => item.Habit.name === habit.name
+                          (item) => item.Habit.name === habit.name,
                         )}
                         onCheckedChange={() => handleToggleHabit(habit.name)}
                       />
@@ -125,7 +126,7 @@ export function HabitList({
                         className={cn(
                           "flex-1 cursor-pointer text-xs font-medium leading-relaxed",
                           done.some((item) => item.Habit.name === habit.name) &&
-                            "text-gray-500 line-through"
+                            "text-gray-500 line-through",
                         )}
                       >
                         {habit.name}
@@ -135,7 +136,7 @@ export function HabitList({
                     <>
                       <span className="text-xs">
                         {done.filter(
-                          (item) => item.Habit.name === habit.name
+                          (item) => item.Habit.name === habit.name,
                         )[0]?.value || 0}
                       </span>
 
@@ -174,7 +175,7 @@ export function HabitList({
                           onChange={(e) =>
                             handleDistanceInputChange(
                               Number(convertToFloat(e.target.value)),
-                              habit.name
+                              habit.name,
                             )
                           }
                           defaultValue={

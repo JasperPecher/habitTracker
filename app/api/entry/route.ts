@@ -20,7 +20,6 @@ export const POST = async (request: Request) => {
   startDate.setHours(0, 0, 0, 0); // Beginning of the day in UTC
   const endDate = new Date(body.date);
   endDate.setHours(24, 0, 0, 0); // End of the day in UTC
-  console.log(body.date);
 
   try {
     const entry = await prisma.entry.findFirst({
@@ -119,6 +118,6 @@ export async function GET(req: Request) {
       entries: entries,
       habits: habits,
     },
-    { status: 200 }
+    { status: 200 },
   );
 }
