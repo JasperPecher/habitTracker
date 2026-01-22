@@ -46,13 +46,23 @@ export function HabitList({
     onUpdate(selectedDate, habit);
   };
 
+  function convertToUTCKeepingDate(localDate: Date): Date {
+    // Get the local date components
+    const year = localDate.getFullYear();
+    const month = localDate.getMonth();
+    const day = localDate.getDate();
+    // Create a new date object in UTC with the same date components
+    const utcDate = new Date(Date.UTC(year, month, day));
+    // Convert to a UTC Date (input date -1h for germany)
+    return utcDate;
+  }
+
   const handleDistanceInputChange = (newValue: number, habitName: string) => {
     if (isFutureDate) return;
     const updatedValues = [...done];
     const index = updatedValues.findIndex(
       (item) => item.Habit.name === habitName,
     );
-
     if (index === -1) {
       updatedValues.push({
         id: 1,
@@ -77,8 +87,11 @@ export function HabitList({
   const handleDistanceHabit = (habit: string) => {
     if (isFutureDate) return;
     const newValueIndex = done.findIndex((item) => item.Habit.name === habit);
-
-    onUpdate(selectedDate, habit, done[newValueIndex].value);
+    onUpdate(
+      convertToUTCKeepingDate(selectedDate),
+      habit,
+      done[newValueIndex].value,
+    );
   };
 
   return (

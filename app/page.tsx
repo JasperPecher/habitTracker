@@ -61,8 +61,6 @@ export default function HabitTracker() {
     habit: string,
     value?: number,
   ) => {
-    console.log(date);
-
     try {
       await axios.post("/api/entry", {
         date: date,

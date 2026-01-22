@@ -15,11 +15,7 @@ export const POST = async (request: Request) => {
       status: 401,
     });
   }
-  console.error("date: ", body.date);
-
   const startDate = new Date(body.date);
-  console.error("startDate: ", startDate);
-
   startDate.setHours(0, 0, 0, 0); // Beginning of the day in UTC
   const endDate = new Date(body.date);
   endDate.setHours(24, 0, 0, 0); // End of the day in UTC
